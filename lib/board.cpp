@@ -1,4 +1,5 @@
 #include "board.h"
+#include "colours.h"
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +15,13 @@ void cgol::board::print() {
             std::cout << "\n"; 
         }
         //std::cout << "x = " << x << " y = " << y << "\n";
-        std::cout << arr[i] << ",";
+
+        if (arr[i]) {
+            std::cout << GRN<< arr[i] << reset << ",";
+        } else {
+            std::cout << RED << arr[i] << reset << ",";
+        }
+        
         x++;
     }
 

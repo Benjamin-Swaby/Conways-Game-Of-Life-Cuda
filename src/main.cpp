@@ -20,6 +20,8 @@ int main(int argc, char *argv[]){
 
     my_board->read(argv[1]); // read the file into the board array
     my_board->print(); // print the board
+    std::cout << my_board->index(3,3) << "\n";
+    std::cout << my_board->arr[33] << "\n";
 
     return 1;
 }
