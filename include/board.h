@@ -6,16 +6,35 @@
 
 #pragma once
 
+#include <cstddef>
+#include <string>
+
 namespace cgol {
 
-    template<size_t max>
     class board {
         public:
-            // a 2d buffer to store cells in
-            // each cell is an int either 1 or 0.
-            int arr[max][max];
-            int state_count; // the iteration of the board
-            board *next_board;
+            int width; // width of the matrix / number of columns in the matrix
+            int height; // number of rows in the matrix
+            int* arr; // **the** array 
+            
+            board *next; // next board
+            board *prev; // previous board
+
+            int position;
+            
+             //constructor 
+            board(int x, int y) {
+                width = x;
+                height = y;
+                arr = new int[width * height]; 
+            }
+
+            // super cool indexing function to treat a 1d array as 2d
+            size_t index( int x, int y ) const { return x + width * y; }
+            void print();
+            void read(std::string path);
+           
     };
+
 
 }
