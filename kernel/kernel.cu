@@ -10,20 +10,15 @@ __global__ void step(int *arr, int *result, size_t N, int width) {
 
    for(int i = index; i < N; i += stride)
    {
-       //TODO check all cells around the target cell 
-       // arr[i] is target cell       
-        result[i] = arr[i];
         int live_neighbours = 0;
-        int target;
-
         int neighbour_indexes[8];
 
         neighbour_indexes[0] = (i - width) - 1; // top left
         neighbour_indexes[1] = (i - width); // top
         neighbour_indexes[2] = (i - width) + 1; // top right
 
-        neighbour_indexes[3] = (i + 1); // right
-        neighbour_indexes[4] = (i - 1); // left
+        neighbour_indexes[3] = (i - 1); // left
+        neighbour_indexes[4] = (i + 1); // right
 
         neighbour_indexes[5] = (i + width) - 1; // bottom left
         neighbour_indexes[6] = (i + width); // bottom
@@ -31,7 +26,7 @@ __global__ void step(int *arr, int *result, size_t N, int width) {
 
 
         // if the top left isn't at the end of the line or before the array
-        if (!(neighbour_indexes[0] < 0 || neighbour_indexes[0] % (width - 1) == 0)) {
+        if (!(neighbour_indexes[0] < 0 || neighbour_indexes[0] % width == 0)) {
             if (arr[neighbour_indexes[0]]) {
                 live_neighbours++;
             }
@@ -44,8 +39,44 @@ __global__ void step(int *arr, int *result, size_t N, int width) {
             }
         }
 
-        if(!(neighbour_indexes[2] < 0 || neighbour_indexes[2] % width == 0)) {
+        // if the top right isn't at the start of a line or before the array
+        if (!(neighbour_indexes[2] < 0 || neighbour_indexes[2] % (width - 1) == 0)) {
             if (arr[neighbour_indexes[2]]) {
+                live_neighbours++;
+            }
+        }
+
+        // if the left isn't at the end of a line
+        if (!(neighbour_indexes[3] % width == 0) || neighbour_indexes[3] < 0) {
+            if (arr[neighbour_indexes[3]]) {
+                live_neighbours++;
+            }
+        }
+
+        // if the right isn't at the start of the next line
+        if (!(neighbour_indexes[4] % (width - 1) == 0) || neighbour_indexes[4] > N) {
+            if (arr[neighbour_indexes[4]]) {
+                live_neighbours++;
+            }
+        }
+
+        // if the bottom left isn't at the end of a line
+        if (!(neighbour_indexes[5] > N || neighbour_indexes[5] % width == 0)) {
+            if (arr[neighbour_indexes[5]]) {
+                live_neighbours++;
+            }
+        }
+
+        // if the bottom one isn't out of the array
+        if (neighbour_indexes[6] < N) {
+            if (arr[neighbour_indexes[6]]) {
+                live_neighbours++;
+            }
+        }
+
+        // if the bottom right isn't at the start of a line or out of the array
+        if (!(neighbour_indexes[7] > N || neighbour_indexes[7] % (width - 1) == 0)) {
+            if (arr[neighbour_indexes[7]]) {
                 live_neighbours++;
             }
         }
@@ -132,6 +163,9 @@ void launcher(board *mb) {
     board *result_board = new board(mb->width, mb->height);
     result_board->arr = result;
     result_board->position = mb->position + 1;
+    
+    // link backwards and forwards
+    result_board->prev = mb;
     mb->next = result_board;
 
     // clean up
