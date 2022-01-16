@@ -4,4 +4,4 @@
 
 using namespace cgol;
 
-void launcher(board mb);
+void launcher(board *mb);

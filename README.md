@@ -31,9 +31,10 @@ This project is to show a CUDA implimentation of Conway's Game Of Life
 - [x] Read input from a file
 - [x] Make a helper program to generate maps
 - []  Create an evaluation Kernel
-- []  form a linked list data structure of boards
+- [x]  form a linked list data structure of boards
 - []  pass the boards iteratively to generate new boards
 - []  dump old boards into a map file
 - []  pop the tail of the linked list to save memory
-- []  *python utility to render map files*
+- []  profile and optimise code
+- []  **python utility to render map files**
 - []  improve generation helper python program

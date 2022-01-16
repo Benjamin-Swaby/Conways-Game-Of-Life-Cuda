@@ -3,6 +3,7 @@
 #include <string>
 
 #include "board.h"
+#include "kernel.h"
 
 using namespace cgol;
 
@@ -18,10 +19,17 @@ int main(int argc, char *argv[]){
     int size = atoi(argv[2]);
     board *my_board = new board(size,size); //make a new board 
 
+    my_board->position = 0; // set as the head
+
     my_board->read(argv[1]); // read the file into the board array
     my_board->print(); // print the board
     std::cout << my_board->index(3,3) << "\n";
     std::cout << my_board->arr[33] << "\n";
+    
+    launcher(my_board); // launch the kernel with this board
+
+    board *result = my_board->next;
+    result->print();
 
     return 1;
 }
