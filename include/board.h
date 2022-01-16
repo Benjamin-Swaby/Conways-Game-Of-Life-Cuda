@@ -33,6 +33,7 @@ namespace cgol {
             size_t index( int x, int y ) const { return x + width * y; }
             void print();
             void read(std::string path);
+            void write(std::string path, int *arr, size_t N);
            
     };
 

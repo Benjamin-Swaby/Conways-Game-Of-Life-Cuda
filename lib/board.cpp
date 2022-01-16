@@ -40,3 +40,12 @@ void cgol::board::read(std::string path) {
         x++;
     }
 }
+
+
+void cgol::board::write(std::string path, int *arr, size_t N) {
+    std::ofstream output(path);
+
+    for (int i = 0; i < N; i++) {
+        output << arr[i];    
+    }
+}

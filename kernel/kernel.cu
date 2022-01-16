@@ -26,7 +26,7 @@ __global__ void step(int *arr, int *result, size_t N, int width) {
 
 
         // if the top left isn't at the end of the line or before the array
-        if (!(neighbour_indexes[0] < 0 || neighbour_indexes[0] % width == 0)) {
+        if (!(neighbour_indexes[0] < 0 || neighbour_indexes[0] % width == (width - 1))) {
             if (arr[neighbour_indexes[0]]) {
                 live_neighbours++;
             }
@@ -40,28 +40,28 @@ __global__ void step(int *arr, int *result, size_t N, int width) {
         }
 
         // if the top right isn't at the start of a line or before the array
-        if (!(neighbour_indexes[2] < 0 || neighbour_indexes[2] % (width - 1) == 0)) {
+        if (!(neighbour_indexes[2] < 0 || neighbour_indexes[2] % width == 0)) {
             if (arr[neighbour_indexes[2]]) {
                 live_neighbours++;
             }
         }
 
         // if the left isn't at the end of a line
-        if (!(neighbour_indexes[3] % width == 0) || neighbour_indexes[3] < 0) {
+        if (!(neighbour_indexes[3] % width == (width - 1)) || neighbour_indexes[3] < 0) {
             if (arr[neighbour_indexes[3]]) {
                 live_neighbours++;
             }
         }
 
         // if the right isn't at the start of the next line
-        if (!(neighbour_indexes[4] % (width - 1) == 0) || neighbour_indexes[4] > N) {
+        if (!(neighbour_indexes[4] % width == 0) || neighbour_indexes[4] > N) {
             if (arr[neighbour_indexes[4]]) {
                 live_neighbours++;
             }
         }
 
         // if the bottom left isn't at the end of a line
-        if (!(neighbour_indexes[5] > N || neighbour_indexes[5] % width == 0)) {
+        if (!(neighbour_indexes[5] > N || neighbour_indexes[5] % width == (width - 1))) {
             if (arr[neighbour_indexes[5]]) {
                 live_neighbours++;
             }
@@ -75,29 +75,30 @@ __global__ void step(int *arr, int *result, size_t N, int width) {
         }
 
         // if the bottom right isn't at the start of a line or out of the array
-        if (!(neighbour_indexes[7] > N || neighbour_indexes[7] % (width - 1) == 0)) {
+        if (!(neighbour_indexes[7] > N || neighbour_indexes[7] % width == 0)) {
             if (arr[neighbour_indexes[7]]) {
                 live_neighbours++;
             }
         }
 
         // -----------------------------------------
+        
 
+        //printf("Cell %d has %d ln \n" , i , live_neighbours);
 
-        if (live_neighbours < 2) { // dies of underpopulation
-            result[i] = 0;
-        }else if (live_neighbours == 2 || live_neighbours == 3) // lives on to next gen
+        if (arr[i] && (live_neighbours == 2 || live_neighbours == 3)) {
+            result[i] = 1;
+        }else if (!arr[i] && (live_neighbours == 3))
         {
             result[i] = 1;
-        }else if (live_neighbours > 3) // dies of overpopulation
-        {
-            result[i] = 0;
-        }else if (live_neighbours == 3 && !arr[i]) // a cell is birthed by 3 neighbours
-        {
-            result[i] = 1;
-        }else {  // cell dies 
-            result[i] = 0; 
+        }else {
+            if(arr[i]) {
+                result[i] = 0;
+            }else if (!arr[i]) {
+                result[i] = 0;
+            }
         }
+        
         
         
         
@@ -139,7 +140,7 @@ void launcher(board *mb) {
 
     // calculate kernel configuaration
     int threads_per_block = 512;
-    printf("number of sms :%d \n", props.multiProcessorCount);
+    //printf("number of sms :%d \n", props.multiProcessorCount);
     int number_of_blocks = props.multiProcessorCount * multi;
 
     //create error variables

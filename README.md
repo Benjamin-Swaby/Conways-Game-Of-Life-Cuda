@@ -17,11 +17,14 @@ To build this program :
 - `make`
 
 ## Running
-This program requires some data in the 
-form of a map to be given to it. To do this
-either create a file (map.mp) for example and fill 
-it with a matrix of 1 and 0. Alternatively a helper program
-can generate you a grid.
+This program takes some arguments and needs an environment
+### Environment
+- in `./bin` create `./bin/out` 
+- run the generator script `python3 Gen.py`
+- enter the number of columns you would like
+- a file `map.mp` has been created
+- run the program with `./cgol map.mp [number of columns] [number of generations]`
+
 
 ## About This Project
 This project is to show a CUDA implimentation of Conway's Game Of Life 
@@ -30,10 +33,10 @@ This project is to show a CUDA implimentation of Conway's Game Of Life
 ## TODO
 - [x] Read input from a file
 - [x] Make a helper program to generate maps
-- [/] Create an evaluation Kernel
+- [x] Create an evaluation Kernel
 - [x] form a linked list data structure of boards
 - [x] pass the boards iteratively to generate new boards  
-- []  **dump result boards into a map file**
+- [x]  **dump result boards into a map file**
 - []  pop the tail of the linked list to save memory
 - []  profile and optimise code
 - []  **python utility to render map files**

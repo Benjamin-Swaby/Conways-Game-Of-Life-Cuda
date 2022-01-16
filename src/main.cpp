@@ -26,14 +26,13 @@ int main(int argc, char *argv[]){
     my_board->read(argv[1]); // read the file into the board array
     my_board->print(); // print the board
 
-    launcher(my_board); // launch the kernel with this board
-
-    board *result = my_board->next;
-    result->print();
-
     board *input = my_board;
+    std::string path_base = "./out/map";
     for (int i = 0; i < generations; i++) {
         launcher(input);
+        input->print();
+        std::string path = path_base + std::to_string(i);
+        input->write(path, input->arr, (input->width * input->height));
         input = input->next;
     }
 
